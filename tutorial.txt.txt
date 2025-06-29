@@ -1,0 +1,5 @@
+dotnet new webapi -n Restaurants.API --no-openapi -controllers
+dotnet new sln
+dotnet new sln -n Restaurants ---> to custom name
+
+ dotnet sln add ./Restaurants.API--->connecting project to solution file

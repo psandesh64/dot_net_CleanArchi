@@ -1,0 +1,23 @@
+[
+  {
+    "ContainingType": "Restaurants.Controllers.WeatherForecastController",
+    "Method": "Generate",
+    "RelativePath": "api/WeatherForecast/generate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "count",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "request",
+        "Type": "Restaurants.Controllers.TemperatureRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
