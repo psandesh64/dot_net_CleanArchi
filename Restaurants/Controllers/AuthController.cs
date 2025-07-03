@@ -1,41 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Restaurants.Application.DTOs;
+using Restaurants.Application.Interfaces;
 
 namespace Restaurants.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IConfiguration configuration) : ControllerBase
+public class AuthController(IUserService userService) : ControllerBase
 {
-    [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginRequest request)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
     {
-        // Hardcoded for testing
-        if (request.Username != "admin" || request.Password != "password")
-            return Unauthorized();
-
-        var claims = new[]
+        try
         {
-            new Claim(ClaimTypes.NameIdentifier, request.Username),
-            new Claim(ClaimTypes.Role, "Admin")
-        };
+            await userService.RegisterAsync(dto);
+            return Ok(new { message = "User registered successfully." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: configuration["JwtSettings:Issuer"],
-            audience: configuration["JwtSettings:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddHours(1),
-            signingCredentials: creds
-        );
-
-        return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
+    {
+        try
+        {
+            var token = await userService.LoginAsync(dto);
+            return Ok(new { token });
+        }
+        catch (Exception ex)
+        {
+            return Unauthorized(new { error = ex.Message });
+        }
     }
 }
-
-public record LoginRequest(string Username, string Password);

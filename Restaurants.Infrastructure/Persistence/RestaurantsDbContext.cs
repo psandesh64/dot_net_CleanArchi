@@ -7,6 +7,8 @@ namespace Restaurants.Infrastructure.Persistence
     {
         internal DbSet<Restaurant> Restaurants { get; set; }
         internal DbSet<Dish> Dishes { get; set; }
+        internal DbSet<User> Users { get; set; } = default!;
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
