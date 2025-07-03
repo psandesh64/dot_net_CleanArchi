@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Restaurants.Application.Interfaces;
 using Restaurants.Infrastructure.Persistence;
 using Restaurants.Infrastructure.Seeders;
+using Restaurants.Infrastructure.Services;
 
 namespace Restaurants.Infrastructure.Extensions
 {
@@ -14,6 +16,8 @@ namespace Restaurants.Infrastructure.Extensions
             services.AddDbContext<RestaurantsDbContext>(options => options.UseSqlServer(connectionString));
 
             services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
+            services.AddScoped<IDishService, DishService>();
+
         }
     }
 }
